@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client/dist/sockjs';
 import api from '../services/api';
@@ -15,7 +15,7 @@ export default function OperacaoTerminal() {
 
   // WebSocket Connection
   useEffect(() => {
-    const socket = new SockJS('http://localhost:8080/ws-prodsync');
+    const socket = new SockJS('https://prodsync-xpef.onrender.com/ws-prodsync');
     const client = new Client({
       webSocketFactory: () => socket,
       debug: (str) => console.log(str),
@@ -27,7 +27,7 @@ export default function OperacaoTerminal() {
     client.onConnect = () => {
       console.log('Connected to WebSocket');
 
-      // Tópico Global (Para Empilhadeiristas)
+      // TÃ³pico Global (Para Empilhadeiristas)
       client.subscribe('/topic/chamados', (msg) => {
         const chamado = JSON.parse(msg.body);
         setChamadosGlobais(prev => {
@@ -41,7 +41,7 @@ export default function OperacaoTerminal() {
         });
       });
 
-      // Tópico Privado (Para Separador atual)
+      // TÃ³pico Privado (Para Separador atual)
       client.subscribe(`/topic/chamados/${separadorId}`, (msg) => {
         const chamado = JSON.parse(msg.body);
         setMeuChamado(chamado);
@@ -81,7 +81,7 @@ export default function OperacaoTerminal() {
       await api.put(`/chamados/${chamadoId}/aceitar`, { empilhadeiristaId });
     } catch (err) {
       if (err.response && err.response.status === 409) {
-        setErrorMsg(err.response.data.erro || 'Chamado já assumido!');
+        setErrorMsg(err.response.data.erro || 'Chamado jÃ¡ assumido!');
       } else {
         setErrorMsg('Erro ao aceitar chamado');
       }
@@ -112,13 +112,13 @@ export default function OperacaoTerminal() {
         <div className="p-6 flex-1 flex flex-col gap-4">
           {!meuChamado || meuChamado.status === 'CONCLUIDO' ? (
             <div className="flex flex-col gap-3">
-              <label className="text-sm font-medium text-slate-700">Endereço (Ex: Rua A, Pos 10)</label>
+              <label className="text-sm font-medium text-slate-700">EndereÃ§o (Ex: Rua A, Pos 10)</label>
               <input 
                 type="text" 
                 value={endereco}
                 onChange={e => setEndereco(e.target.value)}
                 className="p-2 border border-slate-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
-                placeholder="Endereço de descida"
+                placeholder="EndereÃ§o de descida"
               />
               <button 
                 onClick={abrirChamado}
@@ -139,7 +139,7 @@ export default function OperacaoTerminal() {
               ) : (
                 <div className="flex items-center gap-2 text-green-700 font-medium">
                   <CheckCircle className="w-5 h-5" />
-                  Operador {meuChamado.empilhadeirista?.nome || meuChamado.empilhadeirista?.id} está a caminho!
+                  Operador {meuChamado.empilhadeirista?.nome || meuChamado.empilhadeirista?.id} estÃ¡ a caminho!
                 </div>
               )}
             </div>
@@ -168,7 +168,7 @@ export default function OperacaoTerminal() {
           
           <div className="flex flex-col gap-3">
             {chamadosGlobais.length === 0 ? (
-              <p className="text-slate-400 text-sm italic">Nenhum chamado pendente no galpão.</p>
+              <p className="text-slate-400 text-sm italic">Nenhum chamado pendente no galpÃ£o.</p>
             ) : (
               chamadosGlobais.map(c => (
                 <div key={c.id} className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 flex justify-between items-center">

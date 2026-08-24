@@ -122,7 +122,35 @@ const MatrizProdutividadeTable = () => {
               </span>
             </div>
           </div>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex items-center gap-2 mr-4">
+              <input 
+                type="file" 
+                id="csvUpload" 
+                accept=".csv" 
+                className="hidden" 
+                onChange={async (e) => {
+                  const file = e.target.files[0];
+                  if (!file) return;
+                  const formData = new FormData();
+                  formData.append('file', file);
+                  try {
+                    // Temporarily using alert, a toast would be better in the future
+                    await api.post('/importacao/csv', formData, {
+                      headers: { 'Content-Type': 'multipart/form-data' }
+                    });
+                    alert('Planilha importada com sucesso!');
+                    window.location.reload();
+                  } catch (err) {
+                    alert('Erro ao importar planilha. Verifique se o formato está correto.');
+                    console.error(err);
+                  }
+                }}
+              />
+              <label htmlFor="csvUpload" className="cursor-pointer bg-brand-burgundy text-white px-4 py-2 rounded-md hover:bg-brand-burgundy/90 text-sm font-medium transition-colors shadow-sm">
+                Importar CSV
+              </label>
+            </div>
             <div className="text-sm bg-yellow-50 text-yellow-700 px-3 py-2 rounded-md border border-yellow-100">
               <strong className="block">Meta Amarela (R$ 500)</strong>
               &ge; 300 Cx | &ge; 26 Vi

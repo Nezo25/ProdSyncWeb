@@ -12,10 +12,29 @@ const STATUS_CONFIG = {
 export default function Equipe() {
   const [colaboradores, setColaboradores] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [nome, setNome] = useState('');
+  const [role, setRole] = useState('ROLE_SEPARADOR');
 
   useEffect(() => {
     fetchColaboradores();
   }, []);
+
+  const handleCadastrar = async (e) => {
+    e.preventDefault();
+    if (!nome.trim()) return;
+    try {
+      setLoading(true);
+      await api.post('/colaboradores', { nome, role, ativo: true });
+      setNome('');
+      fetchColaboradores();
+      alert('Colaborador cadastrado com sucesso!');
+    } catch (err) {
+      alert('Erro ao cadastrar colaborador');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchColaboradores = async () => {
     try {
@@ -61,7 +80,39 @@ export default function Equipe() {
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
       <div className="p-6 border-b border-gray-200">
         <h2 className="text-xl font-bold text-gray-900">Gestão de Equipe (Floor Check)</h2>
-        <p className="text-gray-500 mt-1">Aponte presenças e faltas rapidamente.</p>
+        <p className="text-gray-500 mt-1">Aponte presenças e cadastre novos funcionários no check floor.</p>
+
+        <form onSubmit={handleCadastrar} className="mt-6 flex flex-col md:flex-row gap-3 items-end bg-gray-50 p-4 rounded-lg border border-gray-100">
+          <div className="flex-1 w-full">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nome do Colaborador</label>
+            <input 
+              type="text" 
+              value={nome} 
+              onChange={e => setNome(e.target.value)} 
+              className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-brand-burgundy focus:border-brand-burgundy bg-white" 
+              placeholder="Ex: João da Silva" 
+              required
+            />
+          </div>
+          <div className="w-full md:w-48 flex-shrink-0">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Cargo</label>
+            <select 
+              value={role} 
+              onChange={e => setRole(e.target.value)} 
+              className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-brand-burgundy focus:border-brand-burgundy bg-white"
+            >
+              <option value="ROLE_SEPARADOR">Separador</option>
+              <option value="ROLE_EMPILHADEIRA">Empilhadeira</option>
+              <option value="ROLE_INVENTARIO">Inventário</option>
+            </select>
+          </div>
+          <button 
+            type="submit" 
+            className="w-full md:w-auto bg-brand-burgundy text-white px-6 py-2 rounded-md hover:bg-brand-burgundy/90 text-sm font-medium transition-colors shadow-sm"
+          >
+            Cadastrar
+          </button>
+        </form>
       </div>
       <table className="w-full text-left border-collapse">
         <thead>

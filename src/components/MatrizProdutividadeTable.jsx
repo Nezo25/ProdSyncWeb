@@ -57,8 +57,8 @@ const MatrizProdutividadeTable = () => {
           return 0; // Nenhum
         };
 
-        const tierA = getTier(mediaCxA, mediaViA);
-        const tierB = getTier(mediaCxB, mediaViB);
+        const tierA = getTier(totalCaixasA, totalVisitasA);
+        const tierB = getTier(totalCaixasB, totalVisitasB);
 
         // Primeiro desempata pela Meta alcançada (Azul ganha de todos)
         if (tierA !== tierB) {
@@ -262,16 +262,16 @@ const MatrizProdutividadeTable = () => {
                       })}
                       
                       {/* Resumo */}
-                      <td className="p-2 text-center font-bold bg-gray-50 border-x border-gray-200 text-brand-burgundy text-xs">
+                      <td className={`p-2 text-center font-bold bg-gray-50 border-x border-gray-200 text-xs ${getCaixasColor(totalCaixas) !== 'text-gray-800 font-semibold' ? getCaixasColor(totalCaixas) : 'text-brand-burgundy'}`}>
                         {totalCaixas}
                       </td>
-                      <td className="p-2 text-center font-bold bg-gray-50 border-r border-gray-200 text-brand-burgundy text-xs">
+                      <td className={`p-2 text-center font-bold bg-gray-50 border-r border-gray-200 text-xs ${getVisitasColor(totalVisitas) !== 'text-gray-800 font-semibold' ? getVisitasColor(totalVisitas) : 'text-brand-burgundy'}`}>
                         {totalVisitas}
                       </td>
-                      <td className={`p-2 text-center font-bold bg-white text-xs ${getCaixasColor(totalCaixas / (colab.horasTrabalhadas || 1))}`}>
+                      <td className="p-2 text-center font-bold bg-white text-xs text-gray-800">
                         {colab.horasTrabalhadas > 0 ? Math.round(totalCaixas / colab.horasTrabalhadas) : 0}
                       </td>
-                      <td className={`p-2 text-center font-bold bg-white text-xs ${getVisitasColor(totalVisitas / (colab.horasTrabalhadas || 1))}`}>
+                      <td className="p-2 text-center font-bold bg-white text-xs text-gray-800">
                         {colab.horasTrabalhadas > 0 ? Math.round(totalVisitas / colab.horasTrabalhadas) : 0}
                       </td>
                     </tr>

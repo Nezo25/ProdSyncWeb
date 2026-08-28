@@ -55,7 +55,7 @@ const GaugeChart = ({ value }) => {
         <span className="text-6xl font-mono font-black tracking-tighter text-white drop-shadow-md">
           {value}
         </span>
-        <span className="text-slate-400 text-sm font-bold uppercase tracking-widest mt-1">Cx / Hora</span>
+        <span className="text-slate-400 text-sm font-bold uppercase tracking-widest mt-1">Cx / Colab</span>
       </div>
     </div>
   );
@@ -122,7 +122,7 @@ export default function TvMode({ onExit }) {
     return { ...colab, caixas, mediaCaixas, mediaVisitas, horas };
   }).filter(c => c.horas > 0).sort((a, b) => b.mediaCaixas - a.mediaCaixas);
 
-  const mediaGlobal = totalHorasTrabalhadas > 0 ? Math.round(totalCaixas / totalHorasTrabalhadas) : 0;
+  const mediaGlobal = headcountAtivo > 0 ? Math.round(totalCaixas / headcountAtivo) : 0;
 
   // Header meta estática por enquanto
   const META_TURNO = 12000;
@@ -214,15 +214,15 @@ export default function TvMode({ onExit }) {
               let numColor = "text-red-400";
               let badge = null;
 
-              if (colab.mediaCaixas >= 350) {
+              if (colab.caixas >= 350) {
                 rowColor = "bg-blue-900/10 border-blue-900/40";
                 numColor = "text-blue-400";
                 badge = <Flame className="w-4 h-4 text-blue-500" />;
-              } else if (colab.mediaCaixas >= 325) {
+              } else if (colab.caixas >= 325) {
                 rowColor = "bg-green-900/10 border-green-900/30";
                 numColor = "text-green-400";
                 badge = <Star className="w-4 h-4 text-green-500" />;
-              } else if (colab.mediaCaixas >= 300) {
+              } else if (colab.caixas >= 300) {
                 rowColor = "border-slate-800";
                 numColor = "text-yellow-400";
               }
